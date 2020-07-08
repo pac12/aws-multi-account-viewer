@@ -70,6 +70,10 @@ export class Navigation extends Component {
                 <NavDropdown.Item href="/AllS3">All S3 Buckets</NavDropdown.Item>
               </NavDropdown>
 
+              <NavDropdown title="Media" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="/AllChannels">All MediaLive Channels</NavDropdown.Item>
+              </NavDropdown>
+
               <NavLink href="/AllData">All Data</NavLink>
               <NavLink href="/refresh">Refresh Checks</NavLink>
               
