@@ -225,6 +225,34 @@ def get_all_eks(account_number, region, cross_account_role):
 
         return var_list
 
+# Get MediaLive Function
+def get_all_medialive_channels(account_number, region, cross_account_role):
+
+    # Init
+    var_list = []
+
+    # Change boto client
+    client_medialive = create_boto_client(
+        account_number, region, 'medialive', cross_account_role)
+
+    # Page all medialive channels
+    paginator = client_medialive.get_paginator('list_channels')
+
+    for page in paginator.paginate():
+        for i in page['Channels']:
+
+            var_list.append(
+                {
+                    'Arn': str(i['Arn']),
+                    'EntryType': 'medialive-channels',
+                    'Id': str(i['Id']),
+                    'AccountNumber': str(account_number),
+                    'Region': str(region),
+                    'Name': str(i['Name']),
+                    'Tags': str(i['Tags'])
+                })
+
+        return var_list
 
 # Get EC2 Function
 def get_all_ec2(account_number, region, cross_account_role):
@@ -776,6 +804,9 @@ def compare_and_update_function(account_number, region, sqs_function, cross_acco
                 account_number, region, cross_account_role)
         elif sqs_function == 'eks':
             current_boto_list = get_all_eks(
+                account_number, region, cross_account_role)
+        elif sqs_function == 'medialive-channels':
+            current_boto_list = get_all_medialive_channels(
                 account_number, region, cross_account_role)
         elif sqs_function == 'rds':
             current_boto_list = get_all_rds(
