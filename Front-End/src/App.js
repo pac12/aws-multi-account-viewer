@@ -11,6 +11,8 @@ import { Navigation } from './components/Navigation';
 import AllEC2 from './pages/AllEC2';
 import AllEKS from './pages/AllEKS';
 import AllChannels from './pages/AllChannels';
+import AllMediaStore from './pages/AllMediaStore';
+import AllMediaTailor from './pages/AllMediaTailor';
 import AllRDS from './pages/AllRDS';
 import AllODCR from './pages/AllODCR';
 import AllRis from './pages/AllRis';
@@ -36,18 +38,15 @@ Amplify.configure({
     // REQUIRED - Amazon Cognito Region
     region: 'us-west-2',
     // OPTIONAL - Amazon Cognito User Pool ID
-    // OLD - userPoolId: "us-west-2_DWd5urMZQ",
-    userPoolId: "us-west-2_f8z1o40H5",
+    userPoolId: "us-west-2_g6aDra3DR",
     // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-    // OLD - userPoolWebClientId: "2q332612v6332mcpldkfc8av50",
-    userPoolWebClientId: "pecpmeleqh4livlaovufs13pp",
+    userPoolWebClientId: "32pae1atthjeo0483o4a3nkr0v",
   },
   API: {
     endpoints: [
       {
         name: "MyAPIGatewayAPI",
-        // OLD - endpoint: "https://6j0d9802ga.execute-api.us-west-2.amazonaws.com/dev",
-        endpoint: "https://9kj8v29mxc.execute-api.us-west-2.amazonaws.com/dev",
+        endpoint: "https://wrq3257nb3.execute-api.us-west-2.amazonaws.com/dev",
         region: 'us-west-2',
         custom_header: async () => {
           return { Authorization: (await Auth.currentSession()).idToken.jwtToken };
@@ -69,6 +68,8 @@ class App extends Component {
           <Route path="/allec2" component={AllEC2} />
           <Route path="/alleks" component={AllEKS} />
           <Route path="/allchannels" component={AllChannels} />
+          <Route path="/allmediastore" component={AllMediaStore} />
+          <Route path="/allmediatailor" component={AllMediaTailor} />
           <Route path="/alllambda" component={AllLambda} />
           <Route path="/Table" component={Table} />
           <Route path="/allodcr" component={AllODCR} />
