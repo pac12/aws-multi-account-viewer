@@ -118,6 +118,8 @@ def lambda_handler(event, context):
             'ri',
             'eks',
             'medialive-channels',
+            'mediastore-containers',
+            'mediatailor-items',
             'testpass'
         ]
 
@@ -159,6 +161,10 @@ def lambda_handler(event, context):
                             accountNumber=i, function='eks', region=b)
                         send_sqs_message(
                             accountNumber=i, function='medialive-channels', region=b)                        
+                        send_sqs_message(
+                            accountNumber=i, function='mediastore-containers', region=b)   
+                        send_sqs_message(
+                            accountNumber=i, function='mediatailor-items', region=b)   
                         send_sqs_message(
                             accountNumber=i, function='rds', region=b)
                         send_sqs_message(

@@ -241,15 +241,91 @@ def get_all_medialive_channels(account_number, region, cross_account_role):
     for page in paginator.paginate():
         for i in page['Channels']:
 
+            Channel_id = i['Id']
+            medialive_detail = client_medialive.describe_channel(ChannelId=Channel_id)
+
             var_list.append(
                 {
-                    'Arn': str(i['Arn']),
+                    'Arn': str(medialive_detail['RoleArn']),
                     'EntryType': 'medialive-channels',
                     'Id': str(i['Id']),
                     'AccountNumber': str(account_number),
                     'Region': str(region),
+                    'Name': str(medialive_detail['Name']),
+                    'Tags': str(medialive_detail['Tags'])
+                    # 'Input': str(medialive_detail['InputSpecification']['Codec'])
+                })
+
+        return var_list
+
+# Get MediaStore Function
+def get_all_mediastore_containers(account_number, region, cross_account_role):
+
+    # Init
+    var_list = []
+
+    # Change boto client
+    client_mediastore = create_boto_client(
+        account_number, region, 'mediastore', cross_account_role)
+
+    # Page all mediastore containers
+    paginator = client_mediastore.get_paginator('list_containers')
+
+    for page in paginator.paginate():
+        for i in page['Containers']:
+
+            # Get tags
+            # Container_name = i['Name']
+            Container_arn = i['ARN']
+            # mediastore_detail = client_mediastore.describe_container(ContainerName=Container_name)
+            mediastore_tags = client_mediastore.list_tags_for_resource(Resource=Container_arn)['Tags']
+
+            var_list.append(
+                {
+                    'Arn': str(i['ARN']),
+                    'EntryType': 'mediastore-containers',
+                    'AccountNumber': str(account_number),
+                    'Region': str(region),
                     'Name': str(i['Name']),
-                    'Tags': str(i['Tags'])
+                    'Tags': str(mediastore_tags),
+                    'Endpoint': str(i['Endpoint']),
+                    'CreationTime': str(i['CreationTime'])
+                })
+
+        return var_list
+
+# Get MediaTailor Function
+def get_all_mediatailor_items(account_number, region, cross_account_role):
+
+    # Init
+    var_list = []
+
+    # Change boto client
+    client_mediatailor = create_boto_client(
+        account_number, region, 'mediatailor', cross_account_role)
+
+    # Page all mediatailor playback configurations
+    paginator = client_mediatailor.get_paginator('list_playback_configurations')
+
+    for page in paginator.paginate():
+        for i in page['Items']:
+
+            # Item_name = i['Name']
+            # Current_arn = i['ARN']
+            # mediastore_detail = client_mediastore.describe_container(ContainerName=Container_name)
+            # mediastore_tags = client_mediastore.list_tags_for_resource(Resource=Current_arn)
+
+            var_list.append(
+                {
+                    'EntryType': 'mediatailor-items',
+                    'AccountNumber': str(account_number),
+                    'Region': str(region),
+                    'Name': str(i['Name']),
+                    'Tags': str(i['Tags']),
+                    'AdDecisionServerUrl': str(i['AdDecisionServerUrl']),
+                    # 'TranscodeProfileName': str(i['TranscodeProfileName']),
+                    'VideoContentSourceUrl': str(i['VideoContentSourceUrl']),
+                    'SlateAdUrl': str(i['SlateAdUrl'])
                 })
 
         return var_list
@@ -807,6 +883,12 @@ def compare_and_update_function(account_number, region, sqs_function, cross_acco
                 account_number, region, cross_account_role)
         elif sqs_function == 'medialive-channels':
             current_boto_list = get_all_medialive_channels(
+                account_number, region, cross_account_role)
+        elif sqs_function == 'mediastore-containers':
+            current_boto_list = get_all_mediastore_containers(
+                account_number, region, cross_account_role)
+        elif sqs_function == 'mediatailor-items':
+            current_boto_list = get_all_mediatailor_items(
                 account_number, region, cross_account_role)
         elif sqs_function == 'rds':
             current_boto_list = get_all_rds(

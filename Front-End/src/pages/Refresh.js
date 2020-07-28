@@ -70,7 +70,9 @@ class Refresh extends React.Component {
                                 <option value="iam-attached-policys">IAM Attached Policys</option>
                                 <option value="vpc">VPC</option>
                                 <option value="eks">EKS</option>
-                                <option value="medialive-channels">MediaLive Channels</option>    
+                                <option value="medialive-channels">MediaLive Channels</option>
+                                <option value="medialive-channels">MediaStore Containers</option>
+                                <option value="medialive-channels">MediaTailor</option>
                                 <option value="network-interfaces">Network Interfaces</option>
                                 <option value="subnet">Subnets</option>
                                 <option value="org">Organizations</option>
